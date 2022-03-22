@@ -1,13 +1,11 @@
 <h1>FAQ</h1>
+{{range .}}
+    {{template "qa" .}}
+{{end}}
+
+{{define "qa"}}
 <p>
-    <strong>Q:</strong> Is there a free version?<br/>
-    <strong>A:</strong> Yes! We offer a free trial for 30 days on any paid plans<br/>
+    <strong>Q:</strong> {{.Question}}<br/>
+    <strong>A:</strong> {{.Answer}}<br/>
 </p>
-<p>
-    <strong>Q:</strong> What are your support hours?<br/>
-    <strong>A:</strong> We have support staff answering emails 24/7, though response times may be a bit slower on weekends.<br/>
-</p>
-<p>
-    <strong>Q:</strong> How do I contact support?<br/>
-    <strong>A:</strong> Email duh.<br/>
-</p>
+{{end}}
