@@ -2,28 +2,22 @@ package main
 
 import (
 	"github.com/go-chi/chi/v5"
-	"html/template"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/sliceking/pieratebay/views"
 	"log"
 	"net/http"
 	"path/filepath"
 )
 
 func executeTemplate(w http.ResponseWriter, tPath string) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	t, err := template.ParseFiles(tPath)
+	t, err := views.Parse(tPath)
 	if err != nil {
 		log.Printf("parsing template: %v", err)
 		http.Error(w, "there was an error parsing the template.", http.StatusInternalServerError)
 		return
 	}
 
-	err = t.Execute(w, nil)
-	if err != nil {
-		log.Printf("executing template: %v", err)
-		http.Error(w, "there was an error executing the template.", http.StatusInternalServerError)
-		return
-	}
+	t.Execute(w, nil)
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -43,6 +37,12 @@ func faqHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	r := chi.NewRouter()
+
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
 	r.Get("/", homeHandler)
 	r.Get("/contact", contactHandler)
 	r.Get("/faq", faqHandler)
