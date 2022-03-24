@@ -36,6 +36,7 @@ func main() {
 		"signup.gohtml", "tailwind.gohtml"))
 
 	r.Get("/signup", usersC.New)
+	r.Post("/users", usersC.Create)
 
 	//r.Post("/users", controllers.)
 

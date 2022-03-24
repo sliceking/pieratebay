@@ -1,16 +1,25 @@
 package controllers
 
 import (
-	"github.com/sliceking/pieratebay/views"
+	"fmt"
 	"net/http"
 )
 
 type Users struct {
 	Templates struct {
-		New views.Template
+		New Template
 	}
 }
 
 func (u Users) New(w http.ResponseWriter, r *http.Request) {
-	u.Templates.New.Execute(w, nil)
+	var data struct {
+		Email string
+	}
+	data.Email = r.FormValue("email")
+	u.Templates.New.Execute(w, data)
+}
+
+func (u Users) Create(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Email: %s", r.FormValue("email"))
+	fmt.Fprintf(w, "\nPassword: %s", r.FormValue("password"))
 }
