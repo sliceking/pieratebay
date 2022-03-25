@@ -42,4 +42,33 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("connected")
+
+	_, err = db.Exec(`
+		CREATE TABLE IF NOT EXISTS users (
+		    id SERIAL PRIMARY KEY,
+		    first_name TEXT,
+		    email TEXT UNIQUE NOT NULL
+		);
+
+		CREATE TABLE IF NOT EXISTS orders (
+		    id SERIAL PRIMARY KEY,
+		    user_id INT NOT NULL,
+		    amount INT,
+		    description TEXT
+		);
+	`)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("tables created")
+
+	name := "bobo"
+	email := "smarty@gmail.com"
+	_, err = db.Exec(`
+		INSERT INTO users (first_name, email)
+		VALUES ($1, $2);`, name, email)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("user created")
 }
